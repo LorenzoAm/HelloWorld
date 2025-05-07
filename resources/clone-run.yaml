@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: clone-run
+spec:
+  taskRef:
+    name: git-clone
+  workspaces:
+    - name: output
+      persistentVolumeClaim:
+        claimName: my-pvc

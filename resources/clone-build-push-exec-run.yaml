@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: clone-build-push-exec-run
+spec:
+  pipelineRef:
+    name: clone-build-push-exec
+  workspaces:
+  - name: output
+    persistentVolumeClaim:
+      claimName: my-pvc
