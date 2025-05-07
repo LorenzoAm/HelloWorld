@@ -1,10 +1,10 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: clone-build-push-exec-run
+  name: pipelinerun-helloworld
 spec:
   pipelineRef:
-    name: clone-build-push-exec
+    name: pipeline-helloworld
   workspaces:
   - name: output
     persistentVolumeClaim:

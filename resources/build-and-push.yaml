@@ -1,51 +1,36 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-    name: build-and-push
+  name: build-and-push
 spec:
-    steps:
-    - name: build
-      image: openjdk:17-jdk-slim
-      workingDir: /workspace/output
-      script: |       #compila il codice sorgente con javac
-        #!/bin/sh
-        cd HelloWorld/src
-        javac HelloWorldMain.java
-        echo "created .class file"
-        ls -l
-    - name: publish
-      image: alpine/git
-      workingDir: /workspace/output
-      env:                #Iniettiamo i valori contenuti nel secret come variabili d'ambiente
-      - name: GITHUB_USER
-        valueFrom:
-          secretKeyRef:
-            name: git-secret
-            key: username
-      - name: GITHUB_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: git-secret
-            key: pat
-      - name: REPO_URL
-        valueFrom:
-          configMapKeyRef:
-            name: config
-            key: repo-url
-      - name: BRANCH
-        valueFrom:
-          configMapKeyRef:
-            name: config
-            key: branch
-      script: |       #pusha il bytecode su repository remoto
-        #!/bin/sh
-        URL=$(echo -n $REPO_URL | sed 's|^https://||')
-        cd HelloWorld
-        git config user.name "Tekton Bot"
-        git config user.email "tekton@example.com"
-        git add src/HelloWorldMain.class
-        git commit -m "aggiunto .class da Tekton"
-        echo "Fatto il commit!"
-        git push "https://$GITHUB_USER:$GITHUB_TOKEN@$URL" $BRANCH
-    workspaces:
-    - name: output
+  steps:
+  - name: buildah-build
+    image: quay.io/buildah/stable
+    workingDir: /workspace/output
+    env:
+    - name: DOCKERHUB_URL
+      valueFrom:
+        configMapKeyRef:
+          name: config
+          key: dockerhub-url
+    script: |
+      #!/bin/sh
+      cd HelloWorld
+      buildah bud -t $DOCKERHUB_URL .
+  - name: buildah-push
+    image: quay.io/buildah/stable
+    workingDir: /workspace/output
+    env:
+    - name: DOCKERHUB_URL
+      valueFrom:
+        configMapKeyRef:
+          name: config
+          key: dockerhub-url
+    securityContext:
+      privileged: true
+    script: |
+      #!/bin/sh
+      echo "Pushing image to Docker Hub"
+      buildah push $DOCKERHUB_URL
+  workspaces:
+  - name: output

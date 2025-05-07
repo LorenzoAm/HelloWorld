@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+    name: compile
+spec:
+    steps:
+    - name: compile
+      image: openjdk:17-jdk-slim
+      workingDir: /workspace/output
+      script: |       #compila il codice sorgente con javac
+        #!/bin/sh
+        cd HelloWorld
+        javac ./src/HelloWorldMain.java
+        echo "created .class file"
+        ls -l
+    workspaces:
+    - name: output

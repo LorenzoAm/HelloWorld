@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: clone-build-push-exec
+  name: pipeline-helloworld
 spec:
   tasks:
   - name: clone
@@ -10,19 +10,19 @@ spec:
     workspaces:
       - name: output
         workspace: output
-  - name: build-and-push
+  - name: compile
     runAfter:
       - clone
     taskRef:
-      name: build-and-push
+      name: compile
     workspaces:
       - name: output
         workspace: output
-  - name: execute
+  - name: build-and-push
     runAfter:
-      - build-and-push
+      - compile
     taskRef:
-      name: execute
+      name: build-and-push
     workspaces:
       - name: output
         workspace: output

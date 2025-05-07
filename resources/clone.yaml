@@ -20,13 +20,13 @@ spec:
       - name: GITHUB_USER         #Iniettiamo i valori contenuti nel secret come variabili d'ambiente
         valueFrom:
           secretKeyRef:
-            name: git-secret
-            key: username
+            name: cred-secret
+            key: username-github
       - name: GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
-            name: git-secret
-            key: pat
+            name: cred-secret
+            key: pat-github
       - name: REPO_URL            #Iniettiamo i valori contenuti nella configMap come variabili d'ambiente
         valueFrom:
           configMapKeyRef:
@@ -50,8 +50,6 @@ spec:
         #!/bin/sh
         ls -l
         cd HelloWorld
-        ls -l
-        cd src
         ls -l
         echo "Repository cloned successfully"
     workspaces:
