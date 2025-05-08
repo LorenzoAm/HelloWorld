@@ -5,7 +5,7 @@ FROM docker.io/eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copy the compiled Java files into the container
-COPY HelloWorld.class /app/
+COPY HelloWorldMain.class /app/
 
 # Command to run the Java program
-CMD ["java", "HelloWorld"]
+CMD ["java", "HelloWorldMain"]
