@@ -16,7 +16,7 @@ spec:
     script: |
       #!/bin/sh
       cd HelloWorld
-      buildah bud -t $DOCKERHUB_URL .
+      buildah --storage-driver=vfs bud -t $DOCKERHUB_URL .
   - name: buildah-push
     image: quay.io/buildah/stable
     workingDir: /workspace/output
@@ -31,6 +31,6 @@ spec:
     script: |
       #!/bin/sh
       echo "Pushing image to Docker Hub"
-      buildah push $DOCKERHUB_URL
+      buildah --storage-driver=vfs push $DOCKERHUB_URL
   workspaces:
   - name: output
