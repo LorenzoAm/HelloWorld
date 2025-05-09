@@ -5,4 +5,4 @@ metadata:
 data:
   repo-url: https://github.com/LorenzoAm/HelloWorld
   branch: main
-  dockerhub-url: docker.io/lorenzam99/helloworld
+  dockerhub-image: docker.io/lorenzam99/helloworld:latest

@@ -4,33 +4,33 @@ metadata:
   name: build-and-push
 spec:
   steps:
-  - name: buildah-build
+  - name: build-and-push
     image: quay.io/buildah/stable
     workingDir: /workspace/output
     env:
-    - name: DOCKERHUB_URL
+    - name: IMAGE
       valueFrom:
         configMapKeyRef:
           name: config
-          key: dockerhub-url
+          key: dockerhub-image
+    - name: USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: cred-secret
+          key: username-dockerhub
+    - name: PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: cred-secret
+          key: pat-dockerhub
     script: |
       #!/bin/sh
       cd HelloWorld
-      buildah --storage-driver=vfs bud -t $DOCKERHUB_URL .
-  - name: buildah-push
-    image: quay.io/buildah/stable
-    workingDir: /workspace/output
-    env:
-    - name: DOCKERHUB_URL
-      valueFrom:
-        configMapKeyRef:
-          name: config
-          key: dockerhub-url
-    securityContext:
-      privileged: true
-    script: |
-      #!/bin/sh
+      buildah --storage-driver=vfs bud -t $IMAGE .
+      echo 'Checking if image is built:'
+      buildah images helloworld:latest
+      buildah login -u $USERNAME -p $PASSWORD docker.io
       echo "Pushing image to Docker Hub"
-      buildah --storage-driver=vfs push $DOCKERHUB_URL
+      buildah --storage-driver=vfs push $IMAGE
   workspaces:
   - name: output

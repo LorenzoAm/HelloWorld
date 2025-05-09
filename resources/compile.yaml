@@ -10,8 +10,8 @@ spec:
       script: |       #compila il codice sorgente con javac
         #!/bin/sh
         cd HelloWorld
-        javac ./src/HelloWorldMain.java
-        echo "created .class file"
+        javac -d . ./src/HelloWorldMain.java
+        echo "checking if .class is under $(workspaces.output.path)/HelloWorld"
         ls -l
     workspaces:
     - name: output
