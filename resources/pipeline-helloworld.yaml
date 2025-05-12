@@ -26,5 +26,13 @@ spec:
     workspaces:
       - name: output
         workspace: output
+  - name: deploy
+    runAfter:
+      - build-and-push
+    taskRef:
+      name: deploy
+    workspaces:
+      - name: output
+        workspace: output
   workspaces:
     - name: output  

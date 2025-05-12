@@ -2,18 +2,16 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy
-  namespace: tekton-pipelines
 spec:
   steps:
-  - computeResources: {}
-    image: quay.io/openshift/origin-cli
-    name: deploy
-    workingDir: /workspace/output
-    script: |
-      #!/bin/sh
-      echo "Deploying the application on Kubernetes cluster"
-      cd HelloWorld
-      kubectl apply -f HelloWorld.yaml
+    - name: deploy
+      image: quay.io/openshift/origin-cli
+      workingDir: /workspace/output
+      script: |
+        #!/bin/sh
+        echo "Deploying the application on Kubernetes cluster"
+        cd HelloWorld
+        kubectl apply -f HelloWorld.yaml
   workspaces:
   - name: output
       
