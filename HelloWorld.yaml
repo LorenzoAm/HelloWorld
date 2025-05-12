@@ -6,7 +6,7 @@ metadata:
     run: test
 spec:
   containers:
-  - image: docker.io/lorenzam99/hello-world:latest
+  - image: docker.io/lorenzam99/helloworld
     name: test
     resources: {}
   dnsPolicy: ClusterFirst
