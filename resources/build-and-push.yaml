@@ -27,8 +27,6 @@ spec:
       #!/bin/sh
       cd HelloWorld
       buildah --storage-driver=vfs bud -t $IMAGE .
-      echo 'Checking if image is built:'
-      buildah images helloworld:latest
       buildah login -u $USERNAME -p $PASSWORD docker.io
       echo "Pushing image to Docker Hub"
       buildah --storage-driver=vfs push $IMAGE
